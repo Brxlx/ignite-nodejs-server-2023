@@ -1,1 +1,6 @@
-GET http://localhost:3000
+POST http://localhost:3000/accounts
+Content-Type: application/json
+
+{
+  "name": "Brunão da Massa"
+}
