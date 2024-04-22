@@ -43,9 +43,6 @@ devDependencies:
   '@types/express':
     specifier: ^4.17.17
     version: 4.17.21
-  '@types/jest':
-    specifier: ^29.5.2
-    version: 29.5.12
   '@types/node':
     specifier: ^20.3.1
     version: 20.12.7
@@ -73,9 +70,6 @@ devDependencies:
   eslint-plugin-simple-import-sort:
     specifier: ^12.1.0
     version: 12.1.0(eslint@8.57.0)
-  jest:
-    specifier: ^29.5.0
-    version: 29.7.0(@types/node@20.12.7)(ts-node@10.9.2)
   prettier:
     specifier: ^3.0.0
     version: 3.2.5
@@ -1255,13 +1249,6 @@ packages:
     resolution: {integrity: sha512-pk2B1NWalF9toCRu6gjBzR69syFjP4Od8WRAX+0mmf9lAjCRicLOWc+ZrxZHx/0XRjotgkF9t6iaMJ+aXcOdZQ==}
     dependencies:
       '@types/istanbul-lib-report': 3.0.3
-    dev: true
-
-  /@types/jest@29.5.12:
-    resolution: {integrity: sha512-eDC8bTvT/QhYdxJAulQikueigY5AsdBRH2yDKW3yveW7svY3+DzN84/2NUgkw10RTiJbWqZrTtoGVdYlvFJdLw==}
-    dependencies:
-      expect: 29.7.0
-      pretty-format: 29.7.0
     dev: true
 
   /@types/json-schema@7.0.15:
