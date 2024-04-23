@@ -1,18 +1,16 @@
 import { Controller, Post, UseGuards } from '@nestjs/common';
-import { JwtService } from '@nestjs/jwt';
-import { AuthGuard } from '@nestjs/passport';
-import { PrismaService } from 'src/prisma/prisma.service';
+import { CurrentUser } from 'src/auth/current-user.decorator';
+import { UserPayload } from 'src/auth/jwt.strategy';
+import { JwtAuthGuard } from 'src/auth/jwt-auth.guard';
 
 @Controller('/questions')
-@UseGuards(AuthGuard('jwt'))
+@UseGuards(JwtAuthGuard)
 export class CreateQuestionController {
-  constructor(
-    private readonly jwt: JwtService,
-    private readonly prisma: PrismaService
-  ) {}
+  constructor() {}
 
   @Post()
-  async handle() {
+  async handle(@CurrentUser() user: UserPayload) {
+    console.log(user.sub);
     return 'ok';
   }
 }
