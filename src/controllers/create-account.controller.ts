@@ -1,8 +1,9 @@
 import { Body, ConflictException, Controller, HttpCode, Post, UsePipes } from '@nestjs/common';
 import { hash } from 'bcryptjs';
-import { ZodValidationPipe } from 'src/pipes/zod-validation.pipe';
-import { PrismaService } from 'src/prisma/prisma.service';
 import { z } from 'zod';
+
+import { ZodValidationPipe } from '@/pipes/zod-validation.pipe';
+import { PrismaService } from '@/prisma/prisma.service';
 
 const createAccountSchema = z.object({
   name: z.string().min(3),
