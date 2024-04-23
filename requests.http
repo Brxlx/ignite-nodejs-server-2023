@@ -1,6 +1,22 @@
-POST http://localhost:3000/accounts
+@baseUrl = http://localhost:3000
+
+# @name create_account
+POST {{baseUrl}}/accounts
 Content-Type: application/json
 
 {
-  "name": "Brunão da Massa"
+  "name": "Brunão da Massa",
+  "email": "bruno@gmei.com",
+  "password": "12345678"
+}
+
+###
+
+# @name authenticate
+POST {{baseUrl}}/sessions
+Content-Type: application/json
+
+{
+  "email": "bruno@gmei.com",
+  "password": "12345678"
 }

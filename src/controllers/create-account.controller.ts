@@ -24,11 +24,11 @@ export class CreateAccountController {
 
     const userExists = await this.prisma.user.findUnique({
       where: {
-        id: 'asas',
+        email,
       },
     });
 
-    if (!userExists) throw new ConflictException('User already exists');
+    if (userExists) throw new ConflictException('User already exists');
 
     const hashedPassword = await hash(password, 8);
 
