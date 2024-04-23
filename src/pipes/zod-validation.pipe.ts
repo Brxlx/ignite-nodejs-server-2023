@@ -18,7 +18,7 @@ export class ZodValidationPipe implements PipeTransform {
           errors: fromZodError(err).details,
         });
       }
-      throw new BadRequestException('Input validation failed');
+      throw new BadRequestException('Unhandled unknown error');
     }
   }
 }
