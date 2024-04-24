@@ -20,8 +20,9 @@ type CreateQuestionResponse = Either<
   }
 >;
 
+// @Injectable()
 export class CreateQuestionUseCase {
-  constructor(private questionsRepository: QuestionsRepository) {}
+  constructor(private readonly questionsRepository: QuestionsRepository) {}
 
   public async execute({
     authorId,
