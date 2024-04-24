@@ -45,6 +45,7 @@
         "ignoreComments": true
       }
     ],
+    "object-shorthand": "error",
     "simple-import-sort/imports": "error",
     "import/newline-after-import": "error",
     "no-unused-vars": "off",
@@ -52,6 +53,7 @@
       "error",
       {
         "args": "all",
+        "vars": "all",
         "argsIgnorePattern": "^_",
         "caughtErrors": "all",
         "caughtErrorsIgnorePattern": "^_",
