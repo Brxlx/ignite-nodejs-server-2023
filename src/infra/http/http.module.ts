@@ -1,15 +1,13 @@
 import { Module } from '@nestjs/common';
 
-import { AuthModule } from './auth/auth.module';
+import { PrismaService } from '../prisma/prisma.service';
 import { AuthenticateController } from './controllers/authenticate.controller';
 import { CreateAccountController } from './controllers/create-account.controller';
 import { CreateQuestionController } from './controllers/create-question.controller';
 import { FetchRecentQuestionsController } from './controllers/fetch-recent-questions.controller';
-import { EnvModule } from './env/env.module';
-import { PrismaService } from './prisma/prisma.service';
 
 @Module({
-  imports: [EnvModule, AuthModule],
+  imports: [],
   controllers: [
     CreateAccountController,
     AuthenticateController,
@@ -17,5 +15,6 @@ import { PrismaService } from './prisma/prisma.service';
     FetchRecentQuestionsController,
   ],
   providers: [PrismaService],
+  exports: [],
 })
-export class AppModule {}
+export class HttpModule {}
