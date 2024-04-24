@@ -3,7 +3,7 @@ import { hash } from 'bcryptjs';
 import { z } from 'zod';
 
 import { ZodValidationPipe } from '@/infra/http/pipes/zod-validation.pipe';
-import { PrismaService } from '@/infra/prisma/prisma.service';
+import { PrismaService } from '@/infra/database/prisma/prisma.service';
 
 const createAccountSchema = z.object({
   name: z.string().min(3),
