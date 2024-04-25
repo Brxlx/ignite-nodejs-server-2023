@@ -6,6 +6,7 @@ import { Either, left, right } from '@/core/types/either';
 import { Encrypter } from '../cryptography/encrypter';
 import { HashComparer } from '../cryptography/hash-comparer';
 import { StudentsRepository } from '../repositories/students-repository';
+import { WrongCredentialsError } from './errors/wrong-credentials.error';
 
 interface AuthenticateStudentRequest {
   email: string;
@@ -33,7 +34,7 @@ export class AuthenticateStudentUseCase {
   }: AuthenticateStudentRequest): Promise<AuthenticateStudentResponse> {
     const student = await this.studentsRepository.findByEmail(email);
 
-    if (!student) return left(new WrongSecretProviderError());
+    if (!student) return left(new WrongCredentialsError());
 
     const isValidPassword = await this.hashComparer.compare(password, student.password);
     if (!isValidPassword)

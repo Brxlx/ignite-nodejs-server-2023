@@ -1,9 +1,12 @@
 import { Module } from '@nestjs/common';
 
 import { QuestionsRepository } from '@/domain/forum/application/repositories/questions-repository';
+import { AuthenticateStudentUseCase } from '@/domain/forum/application/use-cases/authenticate-student-use-case';
 import { CreateQuestionUseCase } from '@/domain/forum/application/use-cases/create-question-use-case';
 import { FetchRecentQuestionsUseCase } from '@/domain/forum/application/use-cases/fetch-recent-questions-use-case';
+import { RegisterStudentUseCase } from '@/domain/forum/application/use-cases/register-student-use-case';
 
+import { CryptographyModule } from '../cryptography/cryptography.module';
 import { DatabaseModule } from '../database/database.module';
 import { AuthenticateController } from './controllers/authenticate.controller';
 import { CreateAccountController } from './controllers/create-account.controller';
@@ -11,7 +14,7 @@ import { CreateQuestionController } from './controllers/create-question.controll
 import { FetchRecentQuestionsController } from './controllers/fetch-recent-questions.controller';
 
 @Module({
-  imports: [DatabaseModule],
+  imports: [DatabaseModule, CryptographyModule],
   controllers: [
     CreateAccountController,
     AuthenticateController,
@@ -19,6 +22,8 @@ import { FetchRecentQuestionsController } from './controllers/fetch-recent-quest
     FetchRecentQuestionsController,
   ],
   providers: [
+    RegisterStudentUseCase,
+    AuthenticateStudentUseCase,
     {
       // Another way to inject useCases dependencies with free bonding out of framework solutuion(@Injectable())
       provide: CreateQuestionUseCase,

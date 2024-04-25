@@ -1,4 +1,4 @@
-import { Body, Controller, Post, UseGuards } from '@nestjs/common';
+import { BadRequestException, Body, Controller, Post, UseGuards } from '@nestjs/common';
 import { z } from 'zod';
 
 import { CreateQuestionUseCase } from '@/domain/forum/application/use-cases/create-question-use-case';
@@ -27,22 +27,13 @@ export class CreateQuestionController {
     const { title, content } = body;
     const userId = user.sub;
 
-    await this.createQuestion.execute({
+    const result = await this.createQuestion.execute({
       title,
       content,
       authorId: userId,
       attachmentsIds: [],
     });
-  }
 
-  private convertToSlug(str: string) {
-    return str
-      .toLowerCase()
-      .trim()
-      .normalize('NFD')
-      .replace(/[\u0300-\u036f]/g, '')
-      .replace(/[^\w\s-]/g, '')
-      .replace(/[^a-z0-9 ]/g, '') // remove all chars not letters, numbers and spaces (to be replaced)
-      .replace(/\s+/g, '-');
+    if (result.isLeft()) throw new BadRequestException();
   }
 }

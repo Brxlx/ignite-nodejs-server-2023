@@ -1,4 +1,4 @@
-import { Controller, Get, Query, UseGuards } from '@nestjs/common';
+import { BadRequestException, Controller, Get, Query, UseGuards } from '@nestjs/common';
 import { z } from 'zod';
 
 import { FetchRecentQuestionsUseCase } from '@/domain/forum/application/use-cases/fetch-recent-questions-use-case';
@@ -26,7 +26,8 @@ export class FetchRecentQuestionsController {
   @Get()
   async handle(@Query('page', queryValidationPipe) page: PageQueryParamSchema = 1) {
     const result = await this.fetchRecentQuestionsUseCase.execute({ page });
-    if (result.isLeft()) throw new Error();
+
+    if (result.isLeft()) throw new BadRequestException();
 
     return { questions: result.value.questions.map(QuestionPresenter.toHTTP) };
   }

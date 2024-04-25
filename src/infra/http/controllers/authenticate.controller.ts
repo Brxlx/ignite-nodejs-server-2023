@@ -1,10 +1,16 @@
-import { Body, Controller, Post, UnauthorizedException, UsePipes } from '@nestjs/common';
-import { JwtService } from '@nestjs/jwt';
-import { compare } from 'bcryptjs';
+import {
+  BadRequestException,
+  Body,
+  Controller,
+  Post,
+  UnauthorizedException,
+  UsePipes,
+} from '@nestjs/common';
 import { z } from 'zod';
 
+import { AuthenticateStudentUseCase } from '@/domain/forum/application/use-cases/authenticate-student-use-case';
+import { WrongCredentialsError } from '@/domain/forum/application/use-cases/errors/wrong-credentials.error';
 import { ZodValidationPipe } from '@/infra/http/pipes/zod-validation.pipe';
-import { PrismaService } from '@/infra/database/prisma/prisma.service';
 
 const authSchema = z.object({
   email: z.string().email(),
@@ -15,10 +21,7 @@ type AuthSchema = z.infer<typeof authSchema>;
 
 @Controller('/sessions')
 export class AuthenticateController {
-  constructor(
-    private readonly jwt: JwtService,
-    private readonly prisma: PrismaService
-  ) {}
+  constructor(private readonly authenticateStudent: AuthenticateStudentUseCase) {}
 
   @Post()
   // @HttpCode(201)
@@ -26,13 +29,20 @@ export class AuthenticateController {
   async handle(@Body() body: AuthSchema) {
     const { email, password } = body;
 
-    const user = await this.prisma.user.findUnique({ where: { email } });
-    if (!user) throw new UnauthorizedException('User credentials do not match');
+    const result = await this.authenticateStudent.execute({ email, password });
 
-    const isValidPassword = await compare(password, user.password);
-    if (!isValidPassword) throw new UnauthorizedException('User credentials do not match');
+    if (result.isLeft()) {
+      const error = result.value;
 
-    const accessToken = this.jwt.sign({ sub: user.id });
+      switch (error.constructor) {
+        case WrongCredentialsError:
+          throw new UnauthorizedException(error.message);
+        default:
+          throw new BadRequestException(error.message);
+      }
+    }
+
+    const { accessToken } = result.value;
 
     return {
       access_token: accessToken,
