@@ -21,12 +21,23 @@ describe('Register Student', () => {
       email: 'johndoe@email.com',
       password: '12345678',
     });
-    console.log(inMemoryStudentsRepository.items);
 
     expect(result.isRight()).toBeTruthy();
     expect(result.value).toEqual({
       student: Array.from(inMemoryStudentsRepository.items.values())[0],
       // student: inMemoryStudentsRepository.items.get(result.value?.student?.id),
     });
+  });
+
+  it('should hash student password upon registration', async () => {
+    await sut.execute({
+      name: 'John Doe',
+      email: 'johndoe@email.com',
+      password: '12345678',
+    });
+
+    const hashedPassword = await fakeHasher.hash('12345678');
+
+    expect(Array.from(inMemoryStudentsRepository.items.values())[0].password === hashedPassword);
   });
 });
