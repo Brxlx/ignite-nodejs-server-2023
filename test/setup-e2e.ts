@@ -14,8 +14,6 @@ import { config } from 'dotenv';
 config({ path: '.env', override: true });
 config({ path: '.env.test', override: true });
 
-console.log(process.env.NODE_ENV);
-
 const prisma = new PrismaClient();
 
 /**
