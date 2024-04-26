@@ -76,7 +76,7 @@ model Answer {
 
 model Comment {
   id         String    @id @default(uuid())
-  comment    String
+  content    String
   createdAt  DateTime  @default(now()) @map("created_at")
   updatedAt  DateTime? @updatedAt @map("updated_at")
   authorId   String    @map("author_id")
