@@ -1,6 +1,5 @@
 import { Module } from '@nestjs/common';
 
-import { QuestionsRepository } from '@/domain/forum/application/repositories/questions-repository';
 import { AuthenticateStudentUseCase } from '@/domain/forum/application/use-cases/authenticate-student-use-case';
 import { CreateQuestionUseCase } from '@/domain/forum/application/use-cases/create-question-use-case';
 import { EditQuestionUseCase } from '@/domain/forum/application/use-cases/edit-question-use-case';
@@ -10,6 +9,8 @@ import { RegisterStudentUseCase } from '@/domain/forum/application/use-cases/reg
 
 import { CryptographyModule } from '../cryptography/cryptography.module';
 import { DatabaseModule } from '../database/database.module';
+import { CreateQuestionModule } from './application/modules/Create-Question/create-question.module';
+import { NestCreateQuestionUseCase } from './application/modules/Create-Question/nest-create-question-use-case.service';
 import { AuthenticateController } from './controllers/authenticate.controller';
 import { CreateAccountController } from './controllers/create-account.controller';
 import { CreateQuestionController } from './controllers/create-question.controller';
@@ -18,11 +19,10 @@ import { FetchRecentQuestionsController } from './controllers/fetch-recent-quest
 import { GetQuestionBySlugController } from './controllers/get-question-by-slug.controller';
 
 @Module({
-  imports: [DatabaseModule, CryptographyModule],
+  imports: [DatabaseModule, CryptographyModule, CreateQuestionModule],
   controllers: [
     CreateAccountController,
     AuthenticateController,
-    CreateQuestionController,
     FetchRecentQuestionsController,
     GetQuestionBySlugController,
     EditQuestionController,
@@ -30,14 +30,14 @@ import { GetQuestionBySlugController } from './controllers/get-question-by-slug.
   providers: [
     RegisterStudentUseCase,
     AuthenticateStudentUseCase,
-    {
-      // Another way to inject useCases dependencies with free bonding out of framework solutuion(@Injectable())
-      provide: CreateQuestionUseCase,
-      useFactory: (questionsRepository: QuestionsRepository) => {
-        return new CreateQuestionUseCase(questionsRepository);
-      },
-      inject: [QuestionsRepository],
-    },
+    // {
+    //   // Another way to inject useCases dependencies with free bonding out of framework solutuion(@Injectable())
+    //   provide: CreateQuestionUseCase,
+    //   useFactory: (questionsRepository: QuestionsRepository) => {
+    //     return new CreateQuestionUseCase(questionsRepository);
+    //   },
+    //   inject: [QuestionsRepository],
+    // },
     FetchRecentQuestionsUseCase,
     GetQuestionBySlugUseCase,
     EditQuestionUseCase,
