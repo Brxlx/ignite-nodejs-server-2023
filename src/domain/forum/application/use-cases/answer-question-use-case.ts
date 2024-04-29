@@ -1,3 +1,5 @@
+import { Injectable } from '@nestjs/common';
+
 import { UniqueEntityID } from '@/core/entities/unique-entity-id';
 import { Either, right } from '@/core/types/either';
 import { Answer } from '@/domain/forum/enterprise/entities/answer';
@@ -7,7 +9,7 @@ import { AnswerAttachmentList } from '../../enterprise/entities/answer-attachmen
 import { AnswersRepository } from '../repositories/answers-repository';
 
 interface AnswerQuestionRequest {
-  instructorId: string;
+  authorId: string;
   questionId: string;
   attachmentsIds: string[];
   content: string;
@@ -19,18 +21,19 @@ type AnswerQuestionResponse = Either<
   }
 >;
 
+@Injectable()
 export class AnswerQuestionUseCase {
   constructor(private answersRepository: AnswersRepository) {}
 
   public async execute({
-    instructorId,
+    authorId,
     questionId,
     attachmentsIds,
     content,
   }: AnswerQuestionRequest): Promise<AnswerQuestionResponse> {
     const answer = Answer.create({
       content,
-      authorId: new UniqueEntityID(instructorId),
+      authorId: new UniqueEntityID(authorId),
       questionId: new UniqueEntityID(questionId),
     });
 
