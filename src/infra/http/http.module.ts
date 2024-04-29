@@ -4,6 +4,7 @@ import { QuestionsRepository } from '@/domain/forum/application/repositories/que
 import { AnswerQuestionUseCase } from '@/domain/forum/application/use-cases/answer-question-use-case';
 import { AuthenticateStudentUseCase } from '@/domain/forum/application/use-cases/authenticate-student-use-case';
 import { CreateQuestionUseCase } from '@/domain/forum/application/use-cases/create-question-use-case';
+import { DeleteAnswerUseCase } from '@/domain/forum/application/use-cases/delete-answer-use-case';
 import { DeleteQuestionUseCase } from '@/domain/forum/application/use-cases/delete-question-use-case';
 import { EditAnswerUseCase } from '@/domain/forum/application/use-cases/edit-answer-use-case';
 import { EditQuestionUseCase } from '@/domain/forum/application/use-cases/edit-question-use-case';
@@ -17,6 +18,7 @@ import { AnswerQuestionController } from './controllers/answer-question.controll
 import { AuthenticateController } from './controllers/authenticate.controller';
 import { CreateAccountController } from './controllers/create-account.controller';
 import { CreateQuestionController } from './controllers/create-question.controller';
+import { DeleteAnswerController } from './controllers/delete-answer.controller';
 import { DeleteQuestionController } from './controllers/delete-question.controller';
 import { EditAnswerController } from './controllers/edit-answer.controller';
 import { EditQuestionController } from './controllers/edit-question.controller';
@@ -35,6 +37,7 @@ import { GetQuestionBySlugController } from './controllers/get-question-by-slug.
     DeleteQuestionController,
     AnswerQuestionController,
     EditAnswerController,
+    DeleteAnswerController,
   ],
   providers: [
     RegisterStudentUseCase,
@@ -53,6 +56,7 @@ import { GetQuestionBySlugController } from './controllers/get-question-by-slug.
     DeleteQuestionUseCase,
     AnswerQuestionUseCase,
     EditAnswerUseCase,
+    DeleteAnswerUseCase,
   ],
   exports: [],
 })
