@@ -20,7 +20,7 @@ export class PrismaAnswersRepository implements AnswersRepository {
   async findManyByQuestionId(questionId: string, { page }: PaginationParams): Promise<Answer[]> {
     const answers = await this.prisma.answer.findMany({
       where: {
-        id: questionId,
+        questionId,
       },
       orderBy: {
         createdAt: 'desc',
