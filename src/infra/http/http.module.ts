@@ -7,6 +7,7 @@ import { BestAnswerQuestionUseCase } from '@/domain/forum/application/use-cases/
 import { CommentOnAnswerUseCase } from '@/domain/forum/application/use-cases/comment-on-answer-use-case';
 import { CommentOnQuestionUseCase } from '@/domain/forum/application/use-cases/comment-on-question-use-case';
 import { CreateQuestionUseCase } from '@/domain/forum/application/use-cases/create-question-use-case';
+import { DeleteAnswerOnCommentUseCase } from '@/domain/forum/application/use-cases/delete-answer-comment-use-case';
 import { DeleteAnswerUseCase } from '@/domain/forum/application/use-cases/delete-answer-use-case';
 import { DeleteQuestionOnCommentUseCase } from '@/domain/forum/application/use-cases/delete-question-comment-use-case';
 import { DeleteQuestionUseCase } from '@/domain/forum/application/use-cases/delete-question-use-case';
@@ -27,6 +28,7 @@ import { CommentOnQuestionController } from './controllers/comment-on-question.c
 import { CreateAccountController } from './controllers/create-account.controller';
 import { CreateQuestionController } from './controllers/create-question.controller';
 import { DeleteAnswerController } from './controllers/delete-answer.controller';
+import { DeleteAnswerOnCommentController } from './controllers/delete-answer-on-comment.controller';
 import { DeleteQuestionController } from './controllers/delete-question.controller';
 import { DeleteQuestionCommentController } from './controllers/delete-question-comment.controller';
 import { EditAnswerController } from './controllers/edit-answer.controller';
@@ -53,6 +55,7 @@ import { GetQuestionBySlugController } from './controllers/get-question-by-slug.
     CommentOnQuestionController,
     DeleteQuestionCommentController,
     CommentOnAnswerController,
+    DeleteAnswerOnCommentController,
   ],
   providers: [
     RegisterStudentUseCase,
@@ -77,6 +80,7 @@ import { GetQuestionBySlugController } from './controllers/get-question-by-slug.
     CommentOnQuestionUseCase,
     DeleteQuestionOnCommentUseCase,
     CommentOnAnswerUseCase,
+    DeleteAnswerOnCommentUseCase,
   ],
   exports: [],
 })
