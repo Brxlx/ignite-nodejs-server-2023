@@ -19,9 +19,11 @@ import { FetchQuestionCommentsUseCase } from '@/domain/forum/application/use-cas
 import { FetchRecentQuestionsUseCase } from '@/domain/forum/application/use-cases/fetch-recent-questions-use-case';
 import { GetQuestionBySlugUseCase } from '@/domain/forum/application/use-cases/get-question-by-slug-use-case';
 import { RegisterStudentUseCase } from '@/domain/forum/application/use-cases/register-student-use-case';
+import { UploadAttachmentUseCase } from '@/domain/forum/application/use-cases/upload-attachment-use-case';
 
 import { CryptographyModule } from '../cryptography/cryptography.module';
 import { DatabaseModule } from '../database/database.module';
+import { StorageModule } from '../storage/storage.module';
 import { AnswerQuestionController } from './controllers/answer-question.controller';
 import { AuthenticateController } from './controllers/authenticate.controller';
 import { ChooseQuestionBestAnswerController } from './controllers/choose-question-best-answer.controller';
@@ -43,7 +45,7 @@ import { GetQuestionBySlugController } from './controllers/get-question-by-slug.
 import { UploadAttachmentController } from './controllers/upload-attachment.controller';
 
 @Module({
-  imports: [DatabaseModule, CryptographyModule],
+  imports: [DatabaseModule, CryptographyModule, StorageModule],
   controllers: [
     CreateAccountController,
     AuthenticateController,
@@ -91,6 +93,7 @@ import { UploadAttachmentController } from './controllers/upload-attachment.cont
     DeleteAnswerOnCommentUseCase,
     FetchQuestionCommentsUseCase,
     FetchAnswerCommentsUseCase,
+    UploadAttachmentUseCase,
   ],
   exports: [],
 })
