@@ -29,22 +29,22 @@ describe('Delete Answer', () => {
     );
     await inMemoryAnswersRepository.create(newAnswer);
 
-    await inMemoryAnswerAttachmentsRepository.create(
+    await inMemoryAnswerAttachmentsRepository.createMany([
       makeAnswerAttachment(
         {
           answerId: newAnswer.id,
           attachmentId: new UniqueEntityID('1'),
         },
         new UniqueEntityID('attachment-1')
-      )
-    );
+      ),
+    ]);
 
-    await inMemoryAnswerAttachmentsRepository.create(
+    await inMemoryAnswerAttachmentsRepository.createMany([
       makeAnswerAttachment({
         answerId: newAnswer.id,
         attachmentId: new UniqueEntityID('2'),
-      })
-    );
+      }),
+    ]);
     // Prefered way
     await sut.execute({
       authorId: newAnswer.authorId.toString(),

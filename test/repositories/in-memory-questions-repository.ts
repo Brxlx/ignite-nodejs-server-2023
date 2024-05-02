@@ -57,7 +57,7 @@ export class InMemoryQuestionsRepository implements QuestionsRepository {
 
     if (questionExists) {
       this.items.delete(questionExists.id);
-      this.questionAttachmentsRepository.deleteManyByQuestionId(question.id.toString());
+      await this.questionAttachmentsRepository.deleteManyByQuestionId(question.id.toString());
     }
   }
 }

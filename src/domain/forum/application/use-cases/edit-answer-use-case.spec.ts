@@ -29,8 +29,7 @@ describe('Edit Answer', () => {
     );
     await inMemoryAnswersRepository.create(newAnswer);
 
-    inMemoryAnswerAttachmentsRepository.items.set(
-      new UniqueEntityID('attachment-1'),
+    inMemoryAnswerAttachmentsRepository.items.push(
       makeAnswerAttachment(
         {
           answerId: newAnswer.id,
@@ -39,8 +38,7 @@ describe('Edit Answer', () => {
         new UniqueEntityID('attachment-1')
       )
     );
-    inMemoryAnswerAttachmentsRepository.items.set(
-      new UniqueEntityID('attachment-2'),
+    inMemoryAnswerAttachmentsRepository.items.push(
       makeAnswerAttachment(
         {
           answerId: newAnswer.id,
@@ -118,5 +116,56 @@ describe('Edit Answer', () => {
 
     expect(result.isLeft()).toBeTruthy();
     expect(result.value).toBeInstanceOf(ResourceNotFoundError);
+  });
+
+  it('should sync new and removed attachments when editing an answer', async () => {
+    const newAnswer = makeAnswer(
+      {
+        authorId: new UniqueEntityID('author-1'),
+      },
+      new UniqueEntityID('question-1')
+    );
+    await inMemoryAnswersRepository.create(newAnswer);
+
+    inMemoryAnswerAttachmentsRepository.items.push(
+      makeAnswerAttachment(
+        {
+          answerId: newAnswer.id,
+          attachmentId: new UniqueEntityID('1'),
+        },
+        new UniqueEntityID('attachment-1')
+      )
+    );
+    inMemoryAnswerAttachmentsRepository.items.push(
+      makeAnswerAttachment(
+        {
+          answerId: newAnswer.id,
+          attachmentId: new UniqueEntityID('2'),
+        },
+        new UniqueEntityID('attachment-2')
+      )
+    );
+
+    // Prefered way
+    const result = await sut.execute({
+      answerId: newAnswer.id.toValue(),
+      authorId: newAnswer.authorId.toString(),
+      content: 'Novo conteúdo',
+      attachmentsIds: ['1', '3'],
+    });
+    // Alternative way
+    // const { question } = await sut.execute({ slug: 'example-question' });
+    expect(result.isRight()).toBeTruthy();
+    // expect(inMemoryQuestionAttachmentsRepository.items).toHaveLength(2);
+    expect(Array.from(inMemoryAnswerAttachmentsRepository.items.values())).toEqual(
+      expect.arrayContaining([
+        expect.objectContaining({
+          attachmentId: new UniqueEntityID('1'),
+        }),
+        expect.objectContaining({
+          attachmentId: new UniqueEntityID('3'),
+        }),
+      ])
+    );
   });
 });
