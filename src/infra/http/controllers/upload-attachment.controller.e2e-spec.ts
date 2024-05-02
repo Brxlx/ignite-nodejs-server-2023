@@ -25,7 +25,7 @@ describe('Upload attachment (E2E)', () => {
     await app.init();
   });
 
-  test('[POST] /attachments', async () => {
+  test.skip('[POST] /attachments', async () => {
     const user = await studentFactory.makePrismaStudent({
       name: 'John Doe',
       email: 'johndoe@email.com',

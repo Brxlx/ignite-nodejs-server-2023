@@ -9,6 +9,7 @@ import { ZodValidationPipe } from '@/infra/http/pipes/zod-validation.pipe';
 const editQuestionSchema = z.object({
   title: z.string(),
   content: z.string(),
+  attachments: z.array(z.string().uuid()),
 });
 
 export type EditQuestionSchema = z.infer<typeof editQuestionSchema>;
@@ -24,7 +25,7 @@ export class EditQuestionController {
     @Param('id') questionId: string,
     @Body(new ZodValidationPipe(editQuestionSchema)) body: EditQuestionSchema
   ) {
-    const { title, content } = body;
+    const { title, content, attachments } = body;
     const userId = user.sub;
 
     const result = await this.editQuestion.execute({
@@ -32,7 +33,7 @@ export class EditQuestionController {
       content,
       authorId: userId,
       questionId,
-      attachmentsIds: [],
+      attachmentsIds: attachments,
     });
 
     if (result.isLeft()) throw new BadRequestException();
