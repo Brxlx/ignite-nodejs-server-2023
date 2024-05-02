@@ -32,25 +32,25 @@ describe('Delete Question', () => {
     );
     await inMemoryQuestionsRepository.create(newQuestion);
 
-    await inMemoryQuestionAttachmentsRepository.create(
+    await inMemoryQuestionAttachmentsRepository.createMany([
       makeQuestionAttachment(
         {
           questionId: newQuestion.id,
           attachmentId: new UniqueEntityID('1'),
         },
         new UniqueEntityID('attachment-1')
-      )
-    );
+      ),
+    ]);
 
-    await inMemoryQuestionAttachmentsRepository.create(
+    await inMemoryQuestionAttachmentsRepository.createMany([
       makeQuestionAttachment(
         {
           questionId: newQuestion.id,
           attachmentId: new UniqueEntityID('2'),
         },
         new UniqueEntityID('attachment-2')
-      )
-    );
+      ),
+    ]);
     // inMemoryQuestionAttachmentsRepository.items.set(
     //   new UniqueEntityID('attachment-2'),
     //   makeQuestionAttachment(

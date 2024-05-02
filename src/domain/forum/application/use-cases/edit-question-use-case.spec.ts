@@ -35,8 +35,7 @@ describe('Edit Question', () => {
     );
     await inMemoryQuestionsRepository.create(newQuestion);
 
-    inMemoryQuestionAttachmentsRepository.items.set(
-      new UniqueEntityID('attachment-1'),
+    inMemoryQuestionAttachmentsRepository.items.push(
       makeQuestionAttachment(
         {
           questionId: newQuestion.id,
@@ -45,8 +44,7 @@ describe('Edit Question', () => {
         new UniqueEntityID('attachment-1')
       )
     );
-    inMemoryQuestionAttachmentsRepository.items.set(
-      new UniqueEntityID('attachment-2'),
+    inMemoryQuestionAttachmentsRepository.items.push(
       makeQuestionAttachment(
         {
           questionId: newQuestion.id,
@@ -129,5 +127,57 @@ describe('Edit Question', () => {
 
     expect(result.isLeft()).toBeTruthy();
     expect(result.value).toBeInstanceOf(ResourceNotFoundError);
+  });
+
+  it('should sync new and removed attachments when editing a question', async () => {
+    const newQuestion = makeQuestion(
+      {
+        authorId: new UniqueEntityID('author-1'),
+      },
+      new UniqueEntityID('question-1')
+    );
+    await inMemoryQuestionsRepository.create(newQuestion);
+
+    inMemoryQuestionAttachmentsRepository.items.push(
+      makeQuestionAttachment(
+        {
+          questionId: newQuestion.id,
+          attachmentId: new UniqueEntityID('1'),
+        },
+        new UniqueEntityID('attachment-1')
+      )
+    );
+    inMemoryQuestionAttachmentsRepository.items.push(
+      makeQuestionAttachment(
+        {
+          questionId: newQuestion.id,
+          attachmentId: new UniqueEntityID('2'),
+        },
+        new UniqueEntityID('attachment-2')
+      )
+    );
+
+    // Prefered way
+    const result = await sut.execute({
+      questionId: newQuestion.id.toValue(),
+      authorId: newQuestion.authorId.toString(),
+      title: 'Pergunta teste',
+      content: 'Novo conteúdo',
+      attachmentsIds: ['1', '3'],
+    });
+    // Alternative way
+    // const { question } = await sut.execute({ slug: 'example-question' });
+    expect(result.isRight()).toBeTruthy();
+    // expect(inMemoryQuestionAttachmentsRepository.items).toHaveLength(2);
+    expect(Array.from(inMemoryQuestionAttachmentsRepository.items.values())).toEqual(
+      expect.arrayContaining([
+        expect.objectContaining({
+          attachmentId: new UniqueEntityID('1'),
+        }),
+        expect.objectContaining({
+          attachmentId: new UniqueEntityID('3'),
+        }),
+      ])
+    );
   });
 });

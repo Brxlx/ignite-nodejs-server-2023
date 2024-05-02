@@ -39,7 +39,47 @@ describe('Create Question', () => {
       expect.objectContaining({ attachmentId: new UniqueEntityID('1') }),
       expect.objectContaining({ attachmentId: new UniqueEntityID('2') }),
     ]);
+  });
 
-    // inMemoryQuestionsRepository.items.delete(question.id);
+  it('should persist attachments when creating a new question', async () => {
+    const result = await sut.execute({
+      authorId: '1',
+      title: 'Nova pergunta',
+      content: 'Conteúdo da pergunta',
+      attachmentsIds: ['1', '2'],
+    });
+    expect(result.isRight()).toBeTruthy();
+    expect(inMemoryQuestionAttachmentsRepository.items).toHaveLength(2);
+    expect(Array.from(inMemoryQuestionAttachmentsRepository.items.values())).toEqual(
+      expect.arrayContaining([
+        expect.objectContaining({
+          attachmentId: new UniqueEntityID('1'),
+        }),
+        expect.objectContaining({
+          attachmentId: new UniqueEntityID('2'),
+        }),
+      ])
+    );
+  });
+
+  it('should persist attachments when creating a new question', async () => {
+    const result = await sut.execute({
+      authorId: '1',
+      title: 'Nova pergunta',
+      content: 'Conteúdo da pergunta',
+      attachmentsIds: ['1', '2'],
+    });
+    expect(result.isRight()).toBeTruthy();
+    expect(inMemoryQuestionAttachmentsRepository.items).toHaveLength(2);
+    expect(Array.from(inMemoryQuestionAttachmentsRepository.items.values())).toEqual(
+      expect.arrayContaining([
+        expect.objectContaining({
+          attachmentId: new UniqueEntityID('1'),
+        }),
+        expect.objectContaining({
+          attachmentId: new UniqueEntityID('2'),
+        }),
+      ])
+    );
   });
 });
