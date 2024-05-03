@@ -9,8 +9,6 @@ type PrismaCommentWithAuthor = PrismaComment & {
 
 export class PrismaCommentWithAuthorMapper {
   static toDomain(raw: PrismaCommentWithAuthor): CommentWithAuthor {
-    if (!raw.questionId) throw new Error('Invalid comment type');
-
     return CommentWithAuthor.create({
       commentId: new UniqueEntityID(raw.id),
       authorId: new UniqueEntityID(raw.authorId),
