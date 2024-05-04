@@ -16,6 +16,7 @@ const pageQueryParamSchema = z
 const queryValidationPipe = new ZodValidationPipe(pageQueryParamSchema);
 
 type PageQueryParamSchema = z.infer<typeof pageQueryParamSchema>;
+// TODO: refactor to bring authorId
 
 @Controller('/questions/:questionId/answers')
 export class FetchQuestionAnswersController {
