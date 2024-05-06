@@ -8,7 +8,7 @@ import { InMemoryQuestionAttachmentsRepository } from 'test/repositories/in-memo
 import { InMemoryQuestionsRepository } from 'test/repositories/in-memory-questions-repository';
 import { InMemoryStudentsRepository } from 'test/repositories/in-memory-students-repository';
 import { waitFor } from 'test/utils/wait-for';
-import { SpyInstance } from 'vitest';
+import { MockInstance } from 'vitest';
 
 import {
   SendNotificationRequest,
@@ -26,7 +26,7 @@ let inMemoryStudentsRepository: InMemoryStudentsRepository;
 let inMemoryAttachmentsRepository: InMemoryAttachmentsRepository;
 let sendNotificationUseCase: SendNotificationUseCase;
 
-let sendNotificationExecuteSpy: SpyInstance<
+let sendNotificationExecuteSpy: MockInstance<
   [SendNotificationRequest],
   Promise<SendNotificationResponse>
 >;
