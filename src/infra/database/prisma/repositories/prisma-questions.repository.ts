@@ -6,6 +6,7 @@ import { QuestionAttachmentsRepository } from '@/domain/forum/application/reposi
 import { QuestionsRepository } from '@/domain/forum/application/repositories/questions-repository';
 import { Question } from '@/domain/forum/enterprise/entities/question';
 import { QuestionDetails } from '@/domain/forum/enterprise/entities/value-objects/question-details';
+import { CacheRepository } from '@/infra/cache/cache-repository';
 
 import { PrismaQuestionMapper } from '../mappers/prisma-question.mapper';
 import { PrismaQuestionDetailsMapper } from '../mappers/prisma-question-details.mapper';
@@ -15,6 +16,7 @@ import { PrismaService } from '../prisma.service';
 export class PrismaQuestionsRepository implements QuestionsRepository {
   constructor(
     private readonly prisma: PrismaService,
+    private readonly cache: CacheRepository,
     private readonly questionAttachmentsRepository: QuestionAttachmentsRepository
   ) {}
 
@@ -31,13 +33,21 @@ export class PrismaQuestionsRepository implements QuestionsRepository {
     return PrismaQuestionMapper.toDomain(question);
   }
   async findDetailsBySlug(slug: string): Promise<QuestionDetails | null> {
+    const cacheHit = await this.cache.get(`question:${slug}:details`);
+
+    if (cacheHit) return JSON.parse(cacheHit);
+
     const question = await this.prisma.question.findFirst({
       where: { slug },
       include: { author: true, attachments: true },
     });
     if (!question) return null;
 
-    return PrismaQuestionDetailsMapper.toDomain(question);
+    const questionDetails = PrismaQuestionDetailsMapper.toDomain(question);
+
+    await this.cache.set(`question:${slug}:details`, JSON.stringify(questionDetails));
+
+    return questionDetails;
   }
   async findMostRecent({ page }: PaginationParams): Promise<Question[]> {
     const questions = await this.prisma.question.findMany({
@@ -59,6 +69,7 @@ export class PrismaQuestionsRepository implements QuestionsRepository {
   async save(question: Question): Promise<void> {
     const data = PrismaQuestionMapper.toPrisma(question);
 
+    // TODO: refactor to transaction api
     await Promise.all([
       this.prisma.question.update({
         where: {
@@ -68,6 +79,7 @@ export class PrismaQuestionsRepository implements QuestionsRepository {
       }),
       this.questionAttachmentsRepository.createMany(question.attachments.getNewItems()),
       this.questionAttachmentsRepository.deleteMany(question.attachments.getRemovedItems()),
+      this.cache.delete(`question:${data.slug}:details`),
     ]);
 
     DomainEvents.dispatchEventsForAggregate(question.id);
