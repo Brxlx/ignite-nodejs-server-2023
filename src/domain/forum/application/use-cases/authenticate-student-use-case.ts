@@ -3,8 +3,8 @@ import { WrongSecretProviderError } from '@nestjs/jwt';
 
 import { Either, left, right } from '@/core/types/either';
 
-import { Encrypter } from '../cryptography/encrypter';
-import { HashComparer } from '../cryptography/hash-comparer';
+import { Encrypter } from '../gateways/cryptography/encrypter';
+import { HashComparer } from '../gateways/cryptography/hash-comparer';
 import { StudentsRepository } from '../repositories/students-repository';
 import { WrongCredentialsError } from './errors/wrong-credentials.error';
 

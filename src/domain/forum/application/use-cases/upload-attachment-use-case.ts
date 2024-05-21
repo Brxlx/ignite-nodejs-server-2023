@@ -4,7 +4,7 @@ import { Either, left, right } from '@/core/types/either';
 
 import { Attachment } from '../../enterprise/entities/attachment';
 import { AttachmentsRepository } from '../repositories/attachments-repository';
-import { Uploader } from '../storage/uploader';
+import { Uploader } from '../gateways/storage/uploader';
 import { InvalidAttachmentTypeError } from './errors/invalid-attachment-type.error';
 
 interface UploadAttachmentRequest {
