@@ -35,7 +35,10 @@ export class PrismaQuestionsRepository implements QuestionsRepository {
   async findDetailsBySlug(slug: string): Promise<QuestionDetails | null> {
     const cacheHit = await this.cache.get(`question:${slug}:details`);
 
-    if (cacheHit) return JSON.parse(cacheHit);
+    if (cacheHit) {
+      const cachedData = JSON.parse(cacheHit);
+      return PrismaQuestionDetailsMapper.toDomain(cachedData);
+    }
 
     const question = await this.prisma.question.findFirst({
       where: { slug },
@@ -43,11 +46,9 @@ export class PrismaQuestionsRepository implements QuestionsRepository {
     });
     if (!question) return null;
 
-    const questionDetails = PrismaQuestionDetailsMapper.toDomain(question);
+    await this.cache.set(`question:${slug}:details`, JSON.stringify(question));
 
-    await this.cache.set(`question:${slug}:details`, JSON.stringify(questionDetails));
-
-    return questionDetails;
+    return PrismaQuestionDetailsMapper.toDomain(question);
   }
   async findMostRecent({ page }: PaginationParams): Promise<Question[]> {
     const questions = await this.prisma.question.findMany({
