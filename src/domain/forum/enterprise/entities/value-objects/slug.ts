@@ -13,7 +13,7 @@ export class Slug {
    *
    * Example: "An example title" => "and-example-title"
    *
-   * @param text {string}
+   * @param {string} text
    *
    */
 
